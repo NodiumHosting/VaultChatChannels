@@ -3,11 +3,14 @@ package com.nodiumhosting.vaultchatchannels.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.nodiumhosting.vaultchatchannels.ChatChannel;
 import com.nodiumhosting.vaultchatchannels.ChannelPlayerData;
 import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.MutableComponent;
@@ -18,7 +21,6 @@ import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class VaultChatCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -54,15 +56,15 @@ public class VaultChatCommand {
 
     private static int ccUsage(CommandContext<CommandSourceStack> ctx) {
         List<String> channelNames = Arrays.stream(ChatChannel.values()).map(ChatChannel::name).toList();
-        ctx.getSource().sendSuccess(new TextComponent(channelNames.toString()), false);
-        AtomicReference<MutableComponent> availableChannels = new AtomicReference<>(new TextComponent(""));
-        channelNames.forEach((channel) -> {
-            availableChannels.set(availableChannels.get().append(new TextComponent(channel).withStyle(ChatFormatting.GOLD)));
-            if (channelNames.indexOf(channel) < channelNames.size() - 1) {
-                availableChannels.set(availableChannels.get().append(new TextComponent(", ")));
+//        ctx.getSource().sendSuccess(new TextComponent(channelNames.toString()), false);
+        MutableComponent availableChannels = new TextComponent("");
+        for (int i = 0; i < channelNames.size(); i++) {
+            availableChannels.append(new TextComponent(channelNames.get(i)).withStyle(ChatFormatting.GOLD));
+            if (i < channelNames.size() - 1) {
+                availableChannels.append(new TextComponent(", "));
             }
-        });
-        ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ")), false);
+        }
+        ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
         return Command.SINGLE_SUCCESS;
     }
 
