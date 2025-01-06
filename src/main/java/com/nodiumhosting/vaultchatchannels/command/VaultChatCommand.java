@@ -20,6 +20,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.server.command.EnumArgument;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class VaultChatCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -46,10 +47,24 @@ public class VaultChatCommand {
         );
 
         dispatcher.register(Commands.literal("cc")
+                .executes(VaultChatCommand::ccUsage)
                 .then(Commands.argument("channel", channelEnumArgument)
                         .executes(VaultChatCommand::switchSubCommand)
                 )
         );
+    }
+
+    private static int ccUsage(CommandContext<CommandSourceStack> ctx) {
+        List<String> channelNames = Arrays.stream(ChatChannel.values()).map(ChatChannel::name).toList();
+        MutableComponent availableChannels = new TextComponent("");
+        for (int i = 0; i < channelNames.size(); i++) {
+            availableChannels.append(new TextComponent(channelNames.get(i)).withStyle(ChatFormatting.GOLD));
+            if (i < channelNames.size() - 1) {
+                availableChannels.append(new TextComponent(", "));
+            }
+        }
+        ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ")), false);
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int root(CommandContext<CommandSourceStack> ctx) {
