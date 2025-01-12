@@ -35,6 +35,7 @@ public class VaultChatCommand {
                 .then(Commands.literal("switch")
                         .then(Commands.argument("channel", channelEnumArgument)
                                 .executes(VaultChatCommand::switchSubCommand)
+                                .suggests(channelSuggestionProvider)
                         )
                 )
                 .then(Commands.literal("prefix")
@@ -64,7 +65,12 @@ public class VaultChatCommand {
                 availableChannels.append(new TextComponent(", "));
             }
         }
-        ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
+        if (!(ctx.getSource().getEntity() instanceof Player player)) {
+            ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
+
+            return 0;
+        }
+        ctx.getSource().sendSuccess(new TextComponent("Current channel: " + ChannelPlayerData.get(player).getChatChannel().name()).append(new TextComponent("Usage: ")).append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
         return Command.SINGLE_SUCCESS;
     }
 
