@@ -99,6 +99,7 @@ public class ChatGroupCommand {
         Group invitedPlayerGroup = GroupData.getGroup(invitedPlayer.getUUID());
         if (invitedPlayerGroup != null) {
             player.sendMessage(new TextComponent("Player is already in a chat group."), player.getUUID());
+            group.removeInvite(invitedPlayer.getUUID());
             return 0;
         }
 
