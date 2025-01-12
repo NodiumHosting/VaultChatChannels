@@ -55,8 +55,7 @@ public class VaultChatCommand {
             }
         }
         if (!(ctx.getSource().getEntity() instanceof Player player)) {
-            ctx.getSource().sendSuccess(new TextComponent("Usage: ").append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
-
+            ctx.getSource().sendFailure(new TextComponent("You must be a player to use this command"));
             return 0;
         }
         ctx.getSource().sendSuccess(new TextComponent("Current channel: " + ChannelPlayerData.get(player).getChatChannel().name()).append(new TextComponent("Usage: ")).append(new TextComponent("/cc <channel>").withStyle(ChatFormatting.GOLD)).append(new TextComponent(" Available channels: ").append(availableChannels)), false);
