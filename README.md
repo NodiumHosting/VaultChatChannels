@@ -7,3 +7,4 @@ group channels
 some way to display your current channel
 config for showing messages from other channels
 voice group channel
+fix command arguments
