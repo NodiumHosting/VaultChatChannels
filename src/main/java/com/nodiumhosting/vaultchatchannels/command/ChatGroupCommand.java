@@ -80,21 +80,28 @@ public class ChatGroupCommand {
             ctx.getSource().sendFailure(new TextComponent("You must be a player to use this command"));
             return 0;
         }
+
+        ServerPlayer invitedPlayer = null;
         try {
-            ServerPlayer invitedPlayer = EntityArgument.getPlayer(ctx, "player");
-            Group group = GroupData.getGroup(player.getUUID());
-            group.invite(invitedPlayer.getUUID());
-
-            player.sendMessage(new TextComponent("Invited " + invitedPlayer.getDisplayName().getString() + " to your chat group."), player.getUUID());
-            MutableComponent acceptMessage = new TextComponent("You have been invited to join " + player.getDisplayName().getString() + "'s chat group. Click here to join.")
-                    .withStyle(ChatFormatting.GOLD)
-                    .withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/chatgroup accept " + player.getDisplayName().getString())));
-
-            return Command.SINGLE_SUCCESS;
+            invitedPlayer = EntityArgument.getPlayer(ctx, "player");
         } catch (CommandSyntaxException e) {
             ctx.getSource().sendFailure(new TextComponent("Player not found"));
             return 0;
         }
+
+        Group group = GroupData.getGroup(player.getUUID());
+        boolean success = group.invite(invitedPlayer.getUUID());
+        if (!success) {
+            player.sendMessage(new TextComponent("Player is already in your chat group or has already been invited."), player.getUUID());
+            return 0;
+        }
+
+        player.sendMessage(new TextComponent("Invited " + invitedPlayer.getDisplayName().getString() + " to your chat group."), player.getUUID());
+        MutableComponent acceptMessage = new TextComponent("You have been invited to join " + player.getDisplayName().getString() + "'s chat group. Click here to join.")
+                .withStyle(ChatFormatting.GOLD)
+                .withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/chatgroup accept " + player.getDisplayName().getString())));
+
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int acceptSubCommand(CommandContext<CommandSourceStack> ctx) {
@@ -102,25 +109,28 @@ public class ChatGroupCommand {
             ctx.getSource().sendFailure(new TextComponent("You must be a player to use this command"));
             return 0;
         }
+
+        ServerPlayer invitingPlayer = null;
         try {
-            ServerPlayer invitingPlayer = EntityArgument.getPlayer(ctx, "player");
-            Group group = GroupData.getGroup(invitingPlayer.getUUID());
-            if (!group.isInvited(player.getUUID())) {
-                player.sendMessage(new TextComponent("You have not been invited to join " + invitingPlayer.getDisplayName().getString() + "'s chat group."), player.getUUID());
-                return 0;
-            }
-
-            group.removeInvite(player.getUUID());
-            group.add(player.getUUID());
-
-            player.sendMessage(new TextComponent("You have joined " + invitingPlayer.getDisplayName().getString() + "'s chat group."), player.getUUID());
-            invitingPlayer.sendMessage(new TextComponent(player.getDisplayName().getString() + " has joined your chat group."), invitingPlayer.getUUID());
-
-            return Command.SINGLE_SUCCESS;
+            invitingPlayer = EntityArgument.getPlayer(ctx, "player");
         } catch (CommandSyntaxException e) {
             ctx.getSource().sendFailure(new TextComponent("Player not found"));
             return 0;
         }
+
+        Group group = GroupData.getGroup(invitingPlayer.getUUID());
+        if (!group.isInvited(player.getUUID())) {
+            player.sendMessage(new TextComponent("You have not been invited to join " + invitingPlayer.getDisplayName().getString() + "'s chat group."), player.getUUID());
+            return 0;
+        }
+
+        group.removeInvite(player.getUUID());
+        group.add(player.getUUID());
+
+        player.sendMessage(new TextComponent("You have joined " + invitingPlayer.getDisplayName().getString() + "'s chat group."), player.getUUID());
+        invitingPlayer.sendMessage(new TextComponent(player.getDisplayName().getString() + " has joined your chat group."), invitingPlayer.getUUID());
+
+        return Command.SINGLE_SUCCESS;
     }
 
     private static int leaveSubCommand(CommandContext<CommandSourceStack> ctx) {

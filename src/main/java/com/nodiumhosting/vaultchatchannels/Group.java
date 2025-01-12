@@ -26,8 +26,12 @@ public class Group {
             return players.size();
         }
 
-        public void invite(UUID player) {
+        public boolean invite(UUID player) {
+            if (players.contains(player) || invites.contains(player)) {
+                return false;
+            }
             invites.add(player);
+            return true;
         }
 
         public void removeInvite(UUID player) {
