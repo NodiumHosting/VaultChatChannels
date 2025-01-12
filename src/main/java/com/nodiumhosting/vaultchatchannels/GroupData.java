@@ -8,10 +8,14 @@ public class GroupData {
     public static List<Group> groups = new ArrayList<>();
 
     public static Group getGroup(UUID player) {
-        Group group = groups.stream()
+        return groups.stream()
                 .filter(grp -> grp.getPlayers().contains(player))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public static Group getOrCreateGroup(UUID player) {
+        Group group = getGroup(player);
 
         if (group == null) {
             group = new Group();

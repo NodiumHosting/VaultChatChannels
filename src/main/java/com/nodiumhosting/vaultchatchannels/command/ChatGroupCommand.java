@@ -89,7 +89,7 @@ public class ChatGroupCommand {
             return 0;
         }
 
-        Group group = GroupData.getGroup(player.getUUID());
+        Group group = GroupData.getOrCreateGroup(player.getUUID());
         boolean success = group.invite(invitedPlayer.getUUID());
         if (!success) {
             player.sendMessage(new TextComponent("Player is already in your chat group or has already been invited."), player.getUUID());
@@ -127,6 +127,10 @@ public class ChatGroupCommand {
         }
 
         Group group = GroupData.getGroup(invitingPlayer.getUUID());
+        if (group == null) {
+            player.sendMessage(new TextComponent("Player is no longer in a chat group."), player.getUUID());
+            return 0;
+        }
         if (!group.isInvited(player.getUUID())) {
             player.sendMessage(new TextComponent("You have not been invited to join " + invitingPlayer.getDisplayName().getString() + "'s chat group."), player.getUUID());
             return 0;
