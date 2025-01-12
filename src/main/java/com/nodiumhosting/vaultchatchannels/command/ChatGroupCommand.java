@@ -96,6 +96,12 @@ public class ChatGroupCommand {
             return 0;
         }
 
+        Group invitedPlayerGroup = GroupData.getGroup(invitedPlayer.getUUID());
+        if (invitedPlayerGroup != null) {
+            player.sendMessage(new TextComponent("Player is already in a chat group."), player.getUUID());
+            return 0;
+        }
+
         player.sendMessage(new TextComponent("Invited " + invitedPlayer.getDisplayName().getString() + " to your chat group."), player.getUUID());
         MutableComponent acceptMessage = new TextComponent("You have been invited to join " + player.getDisplayName().getString() + "'s chat group. Click here to join.")
                 .withStyle(ChatFormatting.GOLD)
