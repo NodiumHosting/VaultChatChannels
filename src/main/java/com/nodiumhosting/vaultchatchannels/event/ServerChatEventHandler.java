@@ -68,7 +68,10 @@ public class ServerChatEventHandler {
         if (server == null) return;
         PlayerList playerList = server.getPlayerList();
         List<ServerPlayer> players = playerList.getPlayers();
-        sendComponentToPlayers(players, component, ChatChannel.global);
+
+        MutableComponent globalTextComponent = new TextComponent("GLOBAL ")
+                .withStyle(ChatFormatting.BOLD, ChatFormatting.WHITE);
+        sendComponentToPlayers(players, new TextComponent("").append(globalTextComponent).append(component), ChatChannel.global);
     }
 
     private static void sendPartyMessage(ServerPlayer player, Component component) {
