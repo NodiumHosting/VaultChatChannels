@@ -58,6 +58,8 @@ public class ServerChatEventHandler {
             sendVaultMessage(player, component);
         } else if (channel == ChatChannel.group) {
             sendGroupMessage(player, component);
+        } else if (channel == ChatChannel.voice) {
+            sendVoiceMessage(player, component);
         }
     }
 
@@ -125,6 +127,10 @@ public class ServerChatEventHandler {
         MutableComponent groupTextComponent = new TextComponent("GROUP ")
                 .withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN);
         sendComponentToPlayers(members, new TextComponent("").append(groupTextComponent).append(component), ChatChannel.group);
+    }
+
+    private static void sendVoiceMessage(ServerPlayer player, Component component) {
+        // need to mixin into the voice chat mod
     }
 
     private static void sendComponentToPlayers(List<ServerPlayer> players, Component component, ChatChannel channel) {

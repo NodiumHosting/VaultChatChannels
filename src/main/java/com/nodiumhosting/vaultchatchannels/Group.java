@@ -5,12 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 public class Group {
-        private List<UUID> players;
-        private List<UUID> invites;
+        private List<UUID> players = new ArrayList<>();
+        private List<UUID> invites = new ArrayList<>();
 
-        public Group() {
-            this.players = new ArrayList<>();
-        }
+        public Group() {}
 
         public List<UUID> getPlayers() {
             return players;

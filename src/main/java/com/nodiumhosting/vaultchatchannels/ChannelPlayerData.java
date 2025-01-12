@@ -26,8 +26,11 @@ public class ChannelPlayerData {
             ChatChannel.global, '!',
             ChatChannel.party, ':',
             ChatChannel.vault, '#',
-            ChatChannel.group, '@'
+            ChatChannel.group, '@',
+            ChatChannel.voice, '*'
     );
+
+    //TODO: test what happens when you set all the prefixes to the same character
 
     public ChannelPlayerData() {}
 

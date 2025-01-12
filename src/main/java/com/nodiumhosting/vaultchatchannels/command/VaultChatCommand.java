@@ -51,6 +51,7 @@ public class VaultChatCommand {
         builder.suggest("party");
         builder.suggest("vault");
         builder.suggest("group");
+        builder.suggest("voice");
         return builder.buildFuture();
     };
 

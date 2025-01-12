@@ -4,5 +4,6 @@ public enum ChatChannel {
     global,
     party,
     vault,
-    group;
+    group,
+    voice;
 }
