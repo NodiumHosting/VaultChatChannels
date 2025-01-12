@@ -43,13 +43,11 @@ public class VaultChatCommand {
         builder.suggest("party");
         builder.suggest("vault");
         builder.suggest("group");
-        builder.suggest("voice");
         return builder.buildFuture();
     };
 
     private static int ccUsage(CommandContext<CommandSourceStack> ctx) {
         List<String> channelNames = Arrays.stream(ChatChannel.values()).map(ChatChannel::name).toList();
-//        ctx.getSource().sendSuccess(new TextComponent(channelNames.toString()), false);
         MutableComponent availableChannels = new TextComponent("");
         for (int i = 0; i < channelNames.size(); i++) {
             availableChannels.append(new TextComponent(channelNames.get(i)).withStyle(ChatFormatting.GOLD));

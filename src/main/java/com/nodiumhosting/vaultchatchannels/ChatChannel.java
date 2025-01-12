@@ -5,5 +5,4 @@ public enum ChatChannel {
     party,
     vault,
     group,
-    voice;
 }

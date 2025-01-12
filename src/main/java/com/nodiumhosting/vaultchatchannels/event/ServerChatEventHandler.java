@@ -60,8 +60,6 @@ public class ServerChatEventHandler {
             sendVaultMessage(player, component);
         } else if (channel == ChatChannel.group) {
             sendGroupMessage(player, component);
-        } else if (channel == ChatChannel.voice) {
-            sendVoiceMessage(player, component);
         }
     }
 
@@ -132,34 +130,6 @@ public class ServerChatEventHandler {
         MutableComponent groupTextComponent = new TextComponent("GROUP ")
                 .withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN);
         sendComponentToPlayers(members, new TextComponent("").append(groupTextComponent).append(component), ChatChannel.group);
-    }
-
-    private static void sendVoiceMessage(ServerPlayer player, Component component) {
-        // need to mixin into the voice chat mod
-        MinecraftServer server = player.getServer();
-        if (server == null) return;
-        Server voiceServer = new Server(server);
-        PlayerStateManager playerStateManager = voiceServer.getPlayerStateManager();
-        PlayerState playerState = playerStateManager.getState(player.getUUID());
-        if (playerState == null) {
-            player.sendMessage(new TextComponent("[VaultChatChannels] You are not in a voice group - please switch your chat channel.").withStyle(ChatFormatting.RED), player.getUUID());
-            return;
-        }
-        UUID voiceGroupId = playerState.getGroup();
-        if (voiceGroupId == null) {
-            player.sendMessage(new TextComponent("[VaultChatChannels] You are not in a voice group - please switch your chat channel.").withStyle(ChatFormatting.RED), player.getUUID());
-            return;
-        }
-        Collection<PlayerState> playerStates = playerStateManager.getStates();
-        PlayerList playerList = server.getPlayerList();
-        List<ServerPlayer> players = playerStates.stream()
-                .filter(state -> Objects.equals(state.getGroup(), voiceGroupId))
-                .map(state -> playerList.getPlayer(state.getUuid()))
-                .toList();
-
-        MutableComponent voiceTextComponent = new TextComponent("VOICE ")
-                .withStyle(ChatFormatting.BOLD, ChatFormatting.AQUA);
-        sendComponentToPlayers(players, new TextComponent("").append(voiceTextComponent).append(component), ChatChannel.voice);
     }
 
     private static void sendComponentToPlayers(List<ServerPlayer> players, Component component, ChatChannel channel) {

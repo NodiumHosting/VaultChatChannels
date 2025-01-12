@@ -26,8 +26,7 @@ public class ChannelPlayerData {
             ChatChannel.global, '!',
             ChatChannel.party, ':',
             ChatChannel.vault, '#',
-            ChatChannel.group, '@',
-            ChatChannel.voice, '*'
+            ChatChannel.group, '@'
     );
 
     public ChannelPlayerData() {}
