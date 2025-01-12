@@ -3,14 +3,10 @@ package com.nodiumhosting.vaultchatchannels.command;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.suggestion.SuggestionProvider;
-import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.nodiumhosting.vaultchatchannels.ChatChannel;
 import com.nodiumhosting.vaultchatchannels.ChannelPlayerData;
 import net.minecraft.ChatFormatting;
-import net.minecraft.commands.CommandSource;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.MutableComponent;
@@ -24,21 +20,16 @@ import java.util.List;
 
 public class VaultChatCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-        EnumArgument<ChatChannel> channelEnumArgument = EnumArgument.enumArgument(ChatChannel.class);
-        SuggestionProvider<CommandSourceStack> channelSuggestionProvider = (ctx, builder) -> {
-            Arrays.stream(ChatChannel.values()).forEach(channel -> builder.suggest(channel.name()));
-            return builder.buildFuture();
-        };
 
         dispatcher.register(Commands.literal("chatchannels")
                 .executes(VaultChatCommand::root)
                 .then(Commands.literal("switch")
-                        .then(Commands.argument("channel", channelEnumArgument)
+                        .then(Commands.argument("channel", EnumArgument.enumArgument(ChatChannel.class))
                                 .executes(VaultChatCommand::switchSubCommand)
                         )
                 )
                 .then(Commands.literal("prefix")
-                        .then(Commands.argument("channel", channelEnumArgument)
+                        .then(Commands.argument("channel", EnumArgument.enumArgument(ChatChannel.class))
                                 .then(Commands.argument("prefix", StringArgumentType.word())
                                         .executes(VaultChatCommand::prefixSubCommand)
                                 )
@@ -48,7 +39,7 @@ public class VaultChatCommand {
 
         dispatcher.register(Commands.literal("cc")
                 .executes(VaultChatCommand::ccUsage)
-                .then(Commands.argument("channel", channelEnumArgument)
+                .then(Commands.argument("channel", EnumArgument.enumArgument(ChatChannel.class))
                         .executes(VaultChatCommand::switchSubCommand)
                 )
         );
