@@ -20,13 +20,11 @@ import java.util.List;
 
 public class VaultChatCommand {
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
-
         dispatcher.register(Commands.literal("chatchannels")
                 .executes(VaultChatCommand::root)
                 .then(Commands.literal("switch")
                         .then(Commands.argument("channel", EnumArgument.enumArgument(ChatChannel.class))
                                 .executes(VaultChatCommand::switchSubCommand)
-                                .suggests(channelSuggestionProvider)
                         )
                 )
                 .then(Commands.literal("prefix")
