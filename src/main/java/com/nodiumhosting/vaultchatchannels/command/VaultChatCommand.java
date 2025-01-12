@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
 import com.nodiumhosting.vaultchatchannels.ChatChannel;
 import com.nodiumhosting.vaultchatchannels.ChannelPlayerData;
 import net.minecraft.ChatFormatting;
@@ -25,6 +26,7 @@ public class VaultChatCommand {
                 .then(Commands.literal("switch")
                         .then(Commands.argument("channel", EnumArgument.enumArgument(ChatChannel.class))
                                 .executes(VaultChatCommand::switchSubCommand)
+                                .suggests(channelSuggestionProvider)
                         )
                 )
                 .then(Commands.literal("prefix")
@@ -43,6 +45,13 @@ public class VaultChatCommand {
                 )
         );
     }
+
+    private static final SuggestionProvider<CommandSourceStack> channelSuggestionProvider = (ctx, builder) -> {
+        builder.suggest("global");
+        builder.suggest("party");
+        builder.suggest("vault");
+        return builder.buildFuture();
+    };
 
     private static int ccUsage(CommandContext<CommandSourceStack> ctx) {
         List<String> channelNames = Arrays.stream(ChatChannel.values()).map(ChatChannel::name).toList();
