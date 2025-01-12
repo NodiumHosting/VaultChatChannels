@@ -140,16 +140,20 @@ public class ServerChatEventHandler {
         if (server == null) return;
         Server voiceServer = new Server(server);
         PlayerStateManager playerStateManager = voiceServer.getPlayerStateManager();
-        ServerGroupManager groupManager = voiceServer.getGroupManager();
-        de.maxhenkel.voicechat.voice.server.Group voiceGroup = groupManager.getPlayerGroup(player);
-        if (voiceGroup == null) {
+        PlayerState playerState = playerStateManager.getState(player.getUUID());
+        if (playerState == null) {
+            player.sendMessage(new TextComponent("[VaultChatChannels] You are not in a voice group - please switch your chat channel.").withStyle(ChatFormatting.RED), player.getUUID());
+            return;
+        }
+        UUID voiceGroupId = playerState.getGroup();
+        if (voiceGroupId == null) {
             player.sendMessage(new TextComponent("[VaultChatChannels] You are not in a voice group - please switch your chat channel.").withStyle(ChatFormatting.RED), player.getUUID());
             return;
         }
         Collection<PlayerState> playerStates = playerStateManager.getStates();
         PlayerList playerList = server.getPlayerList();
         List<ServerPlayer> players = playerStates.stream()
-                .filter(state -> Objects.equals(state.getGroup(), voiceGroup.getId()))
+                .filter(state -> Objects.equals(state.getGroup(), voiceGroupId))
                 .map(state -> playerList.getPlayer(state.getUuid()))
                 .toList();
 
