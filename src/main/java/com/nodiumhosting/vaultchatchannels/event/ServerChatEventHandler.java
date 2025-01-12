@@ -138,8 +138,7 @@ public class ServerChatEventHandler {
             ChannelPlayerData playerData = ChannelPlayerData.get(player);
             ChatChannel playerChannel = playerData.getChatChannel();
             if (playerChannel != channel) {
-                // TODO: Add a config option to choose whether to receive messages from other channels normally, greyed out, or not at all
-                player.sendMessage(new TextComponent("").append(component).withStyle(ChatFormatting.DARK_GRAY), player.getUUID());
+                player.sendMessage(new TextComponent("").append(component).withStyle(ChatFormatting.GRAY), player.getUUID());
                 return;
             }
             player.sendMessage(component, player.getUUID());
