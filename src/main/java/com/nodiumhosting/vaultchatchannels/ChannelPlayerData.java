@@ -25,7 +25,8 @@ public class ChannelPlayerData {
     private Map<ChatChannel, Character> prefixes = Map.of(
             ChatChannel.global, '!',
             ChatChannel.party, ':',
-            ChatChannel.vault, '#'
+            ChatChannel.vault, '#',
+            ChatChannel.group, '@'
     );
 
     public ChannelPlayerData() {}

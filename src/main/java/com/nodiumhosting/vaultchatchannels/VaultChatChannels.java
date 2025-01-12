@@ -1,6 +1,7 @@
 package com.nodiumhosting.vaultchatchannels;
 
 import com.mojang.logging.LogUtils;
+import com.nodiumhosting.vaultchatchannels.command.ChatGroupCommand;
 import com.nodiumhosting.vaultchatchannels.command.VaultChatCommand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -29,6 +30,7 @@ public class VaultChatChannels {
         @SubscribeEvent
         public static void registerCommands(RegisterCommandsEvent event) {
             VaultChatCommand.register(event.getDispatcher());
+            ChatGroupCommand.register(event.getDispatcher());
         }
     }
 }

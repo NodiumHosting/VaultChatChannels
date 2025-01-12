@@ -2,6 +2,8 @@ package com.nodiumhosting.vaultchatchannels.event;
 
 import com.nodiumhosting.vaultchatchannels.ChannelPlayerData;
 import com.nodiumhosting.vaultchatchannels.ChatChannel;
+import com.nodiumhosting.vaultchatchannels.Group;
+import com.nodiumhosting.vaultchatchannels.GroupData;
 import iskallia.vault.core.vault.Vault;
 import iskallia.vault.world.data.ServerVaults;
 import iskallia.vault.world.data.VaultPartyData;
@@ -54,6 +56,8 @@ public class ServerChatEventHandler {
             sendPartyMessage(player, component);
         } else if (channel == ChatChannel.vault) {
             sendVaultMessage(player, component);
+        } else if (channel == ChatChannel.group) {
+            sendGroupMessage(player, component);
         }
     }
 
@@ -100,6 +104,27 @@ public class ServerChatEventHandler {
         MutableComponent vaultTextComponent = new TextComponent("VAULT ")
                 .withStyle(ChatFormatting.BOLD, ChatFormatting.BLUE);
         sendComponentToPlayers(players, new TextComponent("").append(vaultTextComponent).append(component), ChatChannel.vault);
+    }
+
+    private static void sendGroupMessage(ServerPlayer player, Component component) {
+        Group group = GroupData.getGroup(player.getUUID());
+        if (group == null) {
+            player.sendMessage(new TextComponent("[VaultChatChannels] You are not in a group - please switch your chat channel.").withStyle(ChatFormatting.RED), player.getUUID());
+            return;
+        }
+
+        List<UUID> memberUUIDs = group.getPlayers();
+        MinecraftServer server = player.getServer();
+        if (server == null) return;
+
+        PlayerList serverPlayerList = server.getPlayerList();
+        List<ServerPlayer> members = memberUUIDs.stream()
+                .map(serverPlayerList::getPlayer)
+                .toList();
+
+        MutableComponent groupTextComponent = new TextComponent("GROUP ")
+                .withStyle(ChatFormatting.BOLD, ChatFormatting.GREEN);
+        sendComponentToPlayers(members, new TextComponent("").append(groupTextComponent).append(component), ChatChannel.group);
     }
 
     private static void sendComponentToPlayers(List<ServerPlayer> players, Component component, ChatChannel channel) {
