@@ -36,7 +36,7 @@ public class ServerChatEventHandler {
         Component component = event.getComponent();
         ChannelPlayerData playerData = ChannelPlayerData.get(player);
         ChatChannel channel = playerData.getChatChannel();
-        List<Character> prefixes = playerData.getPrefixes();
+        List<Character> prefixes = ChannelPlayerData.getPrefixes();
 
         for (Character prefix : prefixes) {
             if (message.charAt(0) != prefix) {
@@ -46,7 +46,7 @@ public class ServerChatEventHandler {
             String newMessage = message.substring(1);
             component = new TextComponent(component.getString().replace(message, newMessage)).setStyle(component.getStyle());
             message = newMessage;
-            channel = playerData.getChannelByPrefix(prefix);
+            channel = ChannelPlayerData.getChannelByPrefix(prefix);
             break;
         }
 
@@ -150,7 +150,7 @@ public class ServerChatEventHandler {
         PlayerList playerList = server.getPlayerList();
         List<ServerPlayer> players = playerStates.stream()
                 .filter(state -> Objects.equals(state.getGroup(), voiceGroup.getId()))
-                .map(state -> server.getPlayerList().getPlayer(state.getUuid()))
+                .map(state -> playerList.getPlayer(state.getUuid()))
                 .toList();
 
         MutableComponent voiceTextComponent = new TextComponent("VOICE ")

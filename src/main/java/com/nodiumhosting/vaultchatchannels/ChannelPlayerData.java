@@ -22,15 +22,13 @@ public class ChannelPlayerData {
     }
 
     private ChatChannel chatChannel = ChatChannel.global;
-    private Map<ChatChannel, Character> prefixes = Map.of(
+    private final static Map<ChatChannel, Character> prefixes = Map.of(
             ChatChannel.global, '!',
             ChatChannel.party, ':',
             ChatChannel.vault, '#',
             ChatChannel.group, '@',
             ChatChannel.voice, '*'
     );
-
-    //TODO: test what happens when you set all the prefixes to the same character
 
     public ChannelPlayerData() {}
 
@@ -42,19 +40,11 @@ public class ChannelPlayerData {
         this.chatChannel = chatChannel;
     }
 
-    public Character getPrefix(ChatChannel chatChannel) {
-        return prefixes.get(chatChannel);
-    }
-
-    public void setPrefix(ChatChannel chatChannel, Character prefix) {
-        prefixes.put(chatChannel, prefix);
-    }
-
-    public List<Character> getPrefixes() {
+    public static List<Character> getPrefixes() {
         return prefixes.values().stream().toList();
     }
 
-    public ChatChannel getChannelByPrefix(Character prefix) {
+    public static ChatChannel getChannelByPrefix(Character prefix) {
         return prefixes.entrySet().stream()
                 .filter(entry -> entry.getValue().equals(prefix))
                 .map(Map.Entry::getKey)
