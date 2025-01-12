@@ -101,6 +101,8 @@ public class ChatGroupCommand {
                 .withStyle(ChatFormatting.GOLD)
                 .withStyle(Style.EMPTY.withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/chatgroup accept " + player.getDisplayName().getString())));
 
+        invitedPlayer.sendMessage(acceptMessage, invitedPlayer.getUUID());
+
         return Command.SINGLE_SUCCESS;
     }
 
