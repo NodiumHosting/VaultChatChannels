@@ -1,13 +1,6 @@
 package com.nodiumhosting.vaultchatchannels.event;
 
-import com.nodiumhosting.vaultchatchannels.ChannelPlayerData;
-import com.nodiumhosting.vaultchatchannels.ChatChannel;
-import com.nodiumhosting.vaultchatchannels.Group;
-import com.nodiumhosting.vaultchatchannels.GroupData;
-import de.maxhenkel.voicechat.voice.common.PlayerState;
-import de.maxhenkel.voicechat.voice.server.PlayerStateManager;
-import de.maxhenkel.voicechat.voice.server.Server;
-import de.maxhenkel.voicechat.voice.server.ServerGroupManager;
+import com.nodiumhosting.vaultchatchannels.*;
 import iskallia.vault.core.vault.Vault;
 import iskallia.vault.world.data.ServerVaults;
 import iskallia.vault.world.data.VaultPartyData;
@@ -32,6 +25,7 @@ public class ServerChatEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void handleChat(ServerChatEvent event) {
         ServerPlayer player = event.getPlayer();
+        if (player == null) return;
         String message = event.getMessage();
         Component component = event.getComponent();
         ChannelPlayerData playerData = ChannelPlayerData.get(player);
@@ -134,6 +128,7 @@ public class ServerChatEventHandler {
 
     private static void sendComponentToPlayers(List<ServerPlayer> players, Component component, ChatChannel channel) {
         players.forEach(player -> {
+            if (player == null) return;
             ChannelPlayerData playerData = ChannelPlayerData.get(player);
             ChatChannel playerChannel = playerData.getChatChannel();
             if (playerChannel != channel) {
@@ -142,5 +137,7 @@ public class ServerChatEventHandler {
             }
             player.sendMessage(component, player.getUUID());
         });
+
+        VaultChatChannels.LOGGER.info(component.getString());
     }
 }

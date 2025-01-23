@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 
 @Mod("vaultchatchannels")
 public class VaultChatChannels {
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public VaultChatChannels() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
