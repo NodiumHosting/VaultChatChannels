@@ -47,7 +47,8 @@ public class ServerChatEventHandler {
         event.setCanceled(true);
 
         if (channel == ChatChannel.global) {
-            sendGlobalMessage(player, component);
+            event.setCanceled(false);
+            //sendGlobalMessage(player, component);
         } else if (channel == ChatChannel.party) {
             sendPartyMessage(player, component);
         } else if (channel == ChatChannel.vault) {
